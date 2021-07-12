@@ -15,7 +15,7 @@ func addAction(s string) error {
 	var mutex = &sync.Mutex{}
 	var actionInput models.ActionInput
 
-	// decode the input s
+	// decode the input (string s)
 	err := json.Unmarshal([]byte(s), &actionInput)
 	if err != nil {
 		return ErrJSONMalformed
@@ -38,7 +38,7 @@ func addAction(s string) error {
 // getStats returns a serialized json array of the average time for each action
 func getStats() string {
 	var mutex = &sync.Mutex{}
-	var output []models.ActionOutput
+	var stat []models.ActionOutput
 	//using mutex to protect critical section and prevent race conditions.
 	mutex.Lock()
 	for action, time := range actionMap {
@@ -46,10 +46,12 @@ func getStats() string {
 			Action: action,
 			Avg:    time / 2,
 		}
-		output = append(output, ao)
+		stat = append(stat, ao)
 	}
-	actionOutput, _ := json.Marshal(output)
+	actionStats, _ := json.Marshal(stat)
 	mutex.Unlock()
 
-	return string(actionOutput)
+	//convert to serialized json string array
+	return string(actionStats)
+
 }

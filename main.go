@@ -1,10 +1,10 @@
 package main
 
 func main() {
-	// in := `{"action":"jump","time":100}`
-	// in2 := `{"action":"jump","time":100}`
-	// addAction(in)
-	// addAction(in2)
-	//server.getStats()
-
+	// NOTE: For future considerations, I'd initialize the server (for CRUD operations), database
+	//       and other configurations in this function.
+	// For the simplicity of this exercise, I did not initialize any of the configurations
+	// here as I assumed they were not needed.
+	// Assumptions made - no need to initialize any server, database or other configurations for this
+	// coding exercise.
 }

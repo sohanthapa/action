@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+//TestValidate tests the functionality for Validate function.
 func TestValidate(t *testing.T) {
 	t.Run("error - empty action field", func(t *testing.T) {
 		actionInput := ActionInput{
