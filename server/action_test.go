@@ -17,14 +17,15 @@ func TestAddAction(t *testing.T) {
 	t.Run("add action success", func(t *testing.T) {
 		input := `{"action":"jump","time":100}`
 		input2 := `{"action":"run","time":200}`
-		expectedResponse := make(models.TimeStore)
+		expectedResponse := make(models.ActionMap)
 		expectedResponse["jump"] = 100
 		expectedResponse["run"] = 200
 		err := addAction(input)
 		assert.Nil(t, err)
 		err = addAction(input2)
 		assert.Nil(t, err)
-		assert.Equal(t, expectedResponse, TT)
+		assert.Equal(t, expectedResponse, actionMap)
+		actionMap = make(models.ActionMap)
 	})
 
 }
@@ -37,16 +38,17 @@ func TestGetAction(t *testing.T) {
 	})
 
 	t.Run("add action success", func(t *testing.T) {
-		input := `{"action":"jump","time":100}`
+		input := `{"action":"jump","time":200}`
 		input2 := `{"action":"run","time":200}`
-		expectedResponse := make(models.TimeStore)
-		expectedResponse["jump"] = 100
-		expectedResponse["run"] = 200
-		err := addAction(input)
-		assert.Nil(t, err)
-		err = addAction(input2)
-		assert.Nil(t, err)
-		assert.Equal(t, expectedResponse, TT)
+		input3 := `{"action":"jump","time":300}`
+		input4 := `{"action":"run","time":400}`
+		addAction(input)
+		addAction(input2)
+		addAction(input3)
+		addAction(input4)
+		expectedBody := "[{\"Action\":\"jump\",\"Avg\":250},{\"Action\":\"run\",\"Avg\":300}]"
+		output := getStats()
+		assert.Equal(t, expectedBody, output)
 	})
 
 }
