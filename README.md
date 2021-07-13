@@ -1,7 +1,7 @@
 # About
 This Project has a small library class that performs the operations for addAction and getAction function
 # Prerequisites
-Need to have machine where Golang is installed and configured
+The Project needs to be run on a machine where Golang is installed and configured
 # Instructions
 Download the action project/folder. 
 Go inside the action folder and run the follow commands:
