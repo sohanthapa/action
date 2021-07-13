@@ -5,8 +5,8 @@ The Project needs to be run on a machine where Golang is installed and configure
 # Instructions
 Download the action project/folder. 
 Go inside the action folder and run the follow commands:
-  To build the project: first run "go mod init action" then " go build main.go"
-  To unit test all of the files: run " go test ./..." command.
+To build the project: first run "go mod init action" then " go build main.go".
+To unit test all of the files: run " go test ./..." command.
   
 # Notes: 
   All the assumptions made are listed in the code under each file/function/struct with the title "Assumptions made".
