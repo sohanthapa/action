@@ -12,7 +12,12 @@ type ActionOutput struct {
 	Avg    uint   `json:"avg"`    // average time taken for each action
 }
 
-type ActionMap map[string]uint
+type ActionCounter struct {
+	TotalTime uint
+	Counter   uint
+}
+
+type ActionMap map[string]ActionCounter
 
 // Validate validates the field for ActionInput struct
 // NOTE: assumptions made: Action field cannot empty,

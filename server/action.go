@@ -6,6 +6,11 @@ import (
 	"sync"
 )
 
+/*
+  NOTE: To extend the feature in the future, we could setup API calls (CRUD operations)
+        for the addAction and getAction function below.
+*/
+
 // actionMap stores the total time for each action
 var actionMap = make(models.ActionMap)
 
@@ -27,8 +32,13 @@ func addAction(s string) error {
 		return err
 	}
 	//using mutex to protect critical section and prevent race conditions.
+	// NOTE: for future consideration: we could save the map in database.
 	mutex.Lock()
-	actionMap[actionInput.Action] = actionMap[actionInput.Action] + actionInput.Time
+	ac := actionMap[actionInput.Action]
+	actionMap[actionInput.Action] = models.ActionCounter{
+		TotalTime: actionInput.Time + ac.TotalTime,
+		Counter:   ac.Counter + 1,
+	}
 	mutex.Unlock()
 
 	return nil
@@ -41,10 +51,10 @@ func getStats() string {
 	var stat []models.ActionOutput
 	//using mutex to protect critical section and prevent race conditions.
 	mutex.Lock()
-	for action, time := range actionMap {
+	for action, actionCounter := range actionMap {
 		ao := models.ActionOutput{
 			Action: action,
-			Avg:    time / 2,
+			Avg:    actionCounter.TotalTime / actionCounter.Counter,
 		}
 		stat = append(stat, ao)
 	}
