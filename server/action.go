@@ -52,9 +52,10 @@ func getStats() string {
 	//using mutex to protect critical section and prevent race conditions.
 	mutex.Lock()
 	for action, actionCounter := range actionMap {
+		avgTime := actionCounter.TotalTime / (float64)(actionCounter.Counter)
 		ao := models.ActionOutput{
 			Action: action,
-			Avg:    actionCounter.TotalTime / actionCounter.Counter,
+			Avg:    avgTime,
 		}
 		stat = append(stat, ao)
 	}

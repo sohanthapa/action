@@ -16,6 +16,18 @@ func TestAddAction(t *testing.T) {
 		assert.Equal(t, ErrJSONMalformed, err)
 	})
 
+	t.Run("error - action field empty", func(t *testing.T) {
+		input := `{"action":"","time":100}`
+		err := addAction(input)
+		assert.Equal(t, models.ErrActionFieldEmpty, err)
+	})
+
+	t.Run("error - time field zero value", func(t *testing.T) {
+		input := `{"action":"jump","time":0}`
+		err := addAction(input)
+		assert.Equal(t, models.ErrTimeFieldZero, err)
+	})
+
 	t.Run("add action success", func(t *testing.T) {
 		input := `{"action":"jump","time":100}`
 		input2 := `{"action":"run","time":200}`
@@ -47,33 +59,31 @@ func TestAddAction(t *testing.T) {
 //TestGetAction tests the functionality for getAction function
 func TestGetAction(t *testing.T) {
 	t.Run("get stats success", func(t *testing.T) {
-		input := `{"action":"jump","time":100}`
+		input := `{"action":"jump","time":500}`
 		input2 := `{"action":"run","time":250}`
 		input3 := `{"action":"jump","time":200}`
 		input4 := `{"action":"run","time":400}`
 		input5 := `{"action":"jump","time":500}`
 		//first add actions along with its time.
-		// concurrent calls using go routine
 		addAction(input)
 		addAction(input2)
 		addAction(input3)
 		addAction(input4)
 		addAction(input5)
 
-		//time.Sleep(500 * time.Millisecond)
-
-		actionOuput := models.ActionOutput{
-			Action: "jump",
-			Avg:    266,
-		}
-		actionOutput2 := models.ActionOutput{
-			Action: "run",
-			Avg:    325,
-		}
-		outputStat := []models.ActionOutput{actionOuput, actionOutput2}
-		expectedBody, _ := json.Marshal(outputStat)
+		//call getStats()
 		output := getStats()
-		assert.Equal(t, string(expectedBody), output)
+		var actionOutput []models.ActionOutput
+		json.Unmarshal([]byte(output), &actionOutput)
+		//check if we get the correct avg time for each action
+		for _, ao := range actionOutput {
+			if ao.Action == "jump" {
+				assert.Equal(t, ao.Avg, float64(400))
+			} else if ao.Action == "run" {
+				assert.Equal(t, ao.Avg, float64(325))
+			}
+
+		}
 
 	})
 
